@@ -4,6 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Atelier Mwezi – Céramique faite main (site d'exemple)</title>
+<meta name="description" content="Céramique tournée à la main en petite série : bols, vases, tasses et pichets. Site d'exemple, aucune commande réelle.">
+<meta property="og:title" content="Atelier Mwezi – Céramique faite main">
+<meta property="og:description" content="Bols, vases et tasses tournés à la main, émaillés dans les couleurs du lagon.">
+<meta property="og:type" content="website">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Source+Serif+4:wght@400;600&display=swap">
 <link rel="stylesheet" href="style.css">
 </head>
@@ -31,7 +35,10 @@
 
 <section id="boutique" style="padding-bottom:40px">
 <h2>La boutique</h2>
+<div class="toolbar">
 <div class="filters" role="group" aria-label="Filtrer par catégorie" id="filters"></div>
+<label class="sort">Trier <select id="sort"><option value="">Par défaut</option><option value="asc">Prix croissant</option><option value="desc">Prix décroissant</option></select></label>
+</div>
 <div class="grid" id="grid"></div>
 </section>
 
@@ -45,6 +52,7 @@
 <li><b>Matière</b><span>Grès, émaux sans plomb</span></li>
 <li><b>Fabrication</b><span>Tournage et cuisson à l'atelier</span></li>
 <li><b>Délai d'expédition</b><span>3 à 5 jours ouvrés</span></li>
+<li><b>Livraison</b><span>6,90 €, offerte dès 60 €</span></li>
 <li><b>Retours</b><span>14 jours, pièce intacte</span></li>
 </ul>
 </section>
@@ -58,15 +66,19 @@
 </section>
 <div class="wrap"><footer>Mentions légales, CGV et politique de confidentialité à ajouter avant toute vente réelle.</footer></div>
 
-<aside id="drawer" aria-label="Panier" aria-hidden="true">
+<div id="backdrop" hidden></div>
+<aside id="drawer" aria-label="Panier" aria-hidden="true" inert>
 <button class="close" id="closeCart" aria-label="Fermer le panier">&times;</button>
 <h2>Votre panier</h2>
 <ul id="items"></ul>
+<p id="ship" class="ship"></p>
+<div class="sub"><span>Sous-total</span><span id="subtotal">0 €</span></div>
+<div class="sub"><span>Livraison</span><span id="shipping">–</span></div>
 <div class="total"><span>Total</span><span id="total">0 €</span></div>
 <button class="btn" id="checkout">Commander</button>
 <p id="msg" role="status"></p>
 </aside>
 
-<script src="js/app.js"></script>
+<script src="app.js"></script>
 </body>
 </html>

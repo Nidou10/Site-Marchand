@@ -1,10 +1,10 @@
 var PRODUCTS=[
-{id:1,name:"Bol lagon",cat:"Bols",price:28,shape:"bowl",color:"#0F7A83",desc:"Bol à soupe ou petit-déjeuner, 50 cl."},
-{id:2,name:"Bol ylang",cat:"Bols",price:28,shape:"bowl",color:"#E3B23C",desc:"Même forme, émail jaune pâle."},
-{id:3,name:"Vase haut",cat:"Vases",price:54,shape:"vase",color:"#1F3F46",desc:"Pour trois tiges ou un bouquet sec, 28 cm."},
-{id:4,name:"Mug du matin",cat:"Tasses",price:22,shape:"mug",color:"#8FB8B4",desc:"Anse large, tient bien en main, 30 cl."},
-{id:5,name:"Assiette creuse",cat:"Bols",price:32,shape:"plate",color:"#C9C2B4",desc:"Pour les pâtes, le riz ou les plats à partager."},
-{id:6,name:"Pichet",cat:"Vases",price:46,shape:"jug",color:"#0F5C63",desc:"Pour l'eau à table, 1 litre. Ne goutte pas."}
+{id:1,stock:3,name:"Bol lagon",cat:"Bols",price:28,shape:"bowl",color:"#0F7A83",desc:"Bol à soupe ou petit-déjeuner, 50 cl."},
+{id:2,stock:1,name:"Bol ylang",cat:"Bols",price:28,shape:"bowl",color:"#E3B23C",desc:"Même forme, émail jaune pâle."},
+{id:3,stock:2,name:"Vase haut",cat:"Vases",price:54,shape:"vase",color:"#1F3F46",desc:"Pour trois tiges ou un bouquet sec, 28 cm."},
+{id:4,stock:6,name:"Mug du matin",cat:"Tasses",price:22,shape:"mug",color:"#8FB8B4",desc:"Anse large, tient bien en main, 30 cl."},
+{id:5,stock:0,name:"Assiette creuse",cat:"Bols",price:32,shape:"plate",color:"#C9C2B4",desc:"Pour les pâtes, le riz ou les plats à partager."},
+{id:6,stock:1,name:"Pichet",cat:"Vases",price:46,shape:"jug",color:"#0F5C63",desc:"Pour l'eau à table, 1 litre. Ne goutte pas."}
 ];
 function svg(shape,c,h){
 var d={
@@ -16,32 +16,61 @@ jug:'<path d="M34 14 H80 L84 28 C84 38 92 44 92 70 C92 98 80 108 58 108 C36 108 
 }[shape];
 return '<svg viewBox="0 0 120 120" height="'+h+'" width="'+h+'" role="img" aria-label="'+shape+'">'+d+'</svg>';
 }
-var cart={},cats=["Tout"].concat(PRODUCTS.map(function(p){return p.cat}).filter(function(v,i,a){return a.indexOf(v)===i})),current="Tout";
-var fmt=function(n){return n.toLocaleString("fr-FR")+" €"};
+var SHIPPING=6.9,FREE_FROM=60,KEY="mwezi-cart";
+var cart={},cats=["Tout"].concat(PRODUCTS.map(function(p){return p.cat}).filter(function(v,i,a){return a.indexOf(v)===i})),current="Tout",sort="",lastFocus=null;
+var fmt=function(n){return n.toLocaleString("fr-FR",{minimumFractionDigits:n%1?2:0,maximumFractionDigits:2})+" €"};
+var byId=function(id){return PRODUCTS.filter(function(x){return x.id==id})[0]};
+function load(){try{var c=JSON.parse(localStorage.getItem(KEY)||"{}");Object.keys(c).forEach(function(id){var p=byId(id),q=Math.min(+c[id]||0,p?p.stock:0);if(q>0)cart[id]=q})}catch(e){}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(cart))}catch(e){}}
 document.getElementById("heroShelf").innerHTML=[["vase","#1F3F46",190],["bowl","#0F7A83",110],["jug","#0F5C63",150],["mug","#E3B23C",100]].map(function(x){return svg(x[0],x[1],x[2])}).join("");
 function renderFilters(){
 document.getElementById("filters").innerHTML=cats.map(function(c){return '<button aria-pressed="'+(c===current)+'" data-c="'+c+'">'+c+'</button>'}).join("");
 }
+function stockLabel(p){
+var left=p.stock-(cart[p.id]||0);
+if(p.stock===0)return '<span class="stock out">Vendu</span>';
+if(left===0)return '<span class="stock low">Tout est dans votre panier</span>';
+if(p.stock===1)return '<span class="stock low">Pièce unique</span>';
+if(left<=2)return '<span class="stock low">Plus que '+left+'</span>';
+return '<span class="stock">En stock</span>';
+}
 function renderGrid(){
-document.getElementById("grid").innerHTML=PRODUCTS.filter(function(p){return current==="Tout"||p.cat===current}).map(function(p){
-return '<article class="card"><div class="pic">'+svg(p.shape,p.color,150)+'</div><div class="body"><h3>'+p.name+'</h3><p class="desc">'+p.desc+'</p><div class="row"><span class="price">'+fmt(p.price)+'</span><button class="add" data-id="'+p.id+'">Ajouter</button></div></div></article>';
+var list=PRODUCTS.filter(function(p){return current==="Tout"||p.cat===current}).slice();
+if(sort)list.sort(function(a,b){return sort==="asc"?a.price-b.price:b.price-a.price});
+document.getElementById("grid").innerHTML=list.map(function(p){
+var full=(cart[p.id]||0)>=p.stock;
+return '<article class="card'+(p.stock===0?' sold':'')+'"><div class="pic">'+svg(p.shape,p.color,150)+'</div><div class="body"><h3>'+p.name+'</h3><p class="desc">'+p.desc+'</p>'+stockLabel(p)+'<div class="row"><span class="price">'+fmt(p.price)+'</span><button class="add" data-id="'+p.id+'"'+(full?' disabled':'')+'>'+(p.stock===0?'Vendu':'Ajouter')+'</button></div></div></article>';
 }).join("");
 }
 function renderCart(){
 var ids=Object.keys(cart),n=0,t=0;
 document.getElementById("items").innerHTML=ids.length?ids.map(function(id){
-var p=PRODUCTS.filter(function(x){return x.id==id})[0],q=cart[id];n+=q;t+=q*p.price;
-return '<li><span>'+p.name+'<br><small>'+fmt(p.price)+'</small></span><span class="qty"><button data-d="-1" data-id="'+id+'" aria-label="Retirer un '+p.name+'">&minus;</button>'+q+'<button data-d="1" data-id="'+id+'" aria-label="Ajouter un '+p.name+'">+</button></span></li>';
+var p=byId(id),q=cart[id];n+=q;t+=q*p.price;
+return '<li><span>'+p.name+'<br><small>'+fmt(p.price)+'</small></span><span class="qty"><button data-d="-1" data-id="'+id+'" aria-label="Retirer : '+p.name+'">&minus;</button>'+q+'<button data-d="1" data-id="'+id+'" aria-label="Ajouter : '+p.name+'"'+(q>=p.stock?' disabled':'')+'>+</button></span></li>';
 }).join(""):'<li>Votre panier est vide. Ajoutez une pièce depuis la boutique.</li>';
+var ship=!n||t>=FREE_FROM?0:SHIPPING;
 document.getElementById("count").textContent=n;
-document.getElementById("total").textContent=fmt(t);
+document.getElementById("subtotal").textContent=fmt(t);
+document.getElementById("shipping").textContent=!n?"–":ship?fmt(ship):"Offerte";
+document.getElementById("total").textContent=fmt(t+ship);
+document.getElementById("ship").innerHTML=!n?"":t>=FREE_FROM?"La livraison est offerte.":"Plus que <b>"+fmt(FREE_FROM-t)+"</b> pour la livraison offerte.";
+document.getElementById("ship").style.setProperty("--p",Math.min(t/FREE_FROM,1)*100+"%");
+document.getElementById("checkout").disabled=!n;
+save();
 }
-function setOpen(o){var d=document.getElementById("drawer");d.classList.toggle("open",o);d.setAttribute("aria-hidden",!o);if(o)document.getElementById("closeCart").focus()}
+function setOpen(o){
+var d=document.getElementById("drawer"),b=document.getElementById("backdrop");
+if(o===d.classList.contains("open"))return;
+d.classList.toggle("open",o);d.setAttribute("aria-hidden",!o);d.inert=!o;b.hidden=!o;document.body.classList.toggle("locked",o);
+if(o){lastFocus=document.activeElement;document.getElementById("closeCart").focus()}else if(lastFocus)lastFocus.focus();
+}
 document.getElementById("filters").addEventListener("click",function(e){var c=e.target.getAttribute("data-c");if(c){current=c;renderFilters();renderGrid()}});
-document.getElementById("grid").addEventListener("click",function(e){var id=e.target.getAttribute("data-id");if(id){cart[id]=(cart[id]||0)+1;renderCart();document.getElementById("msg").textContent="";setOpen(true)}});
-document.getElementById("items").addEventListener("click",function(e){var id=e.target.getAttribute("data-id"),d=+e.target.getAttribute("data-d");if(id){cart[id]+=d;if(cart[id]<=0)delete cart[id];renderCart()}});
+document.getElementById("sort").onchange=function(){sort=this.value;renderGrid()};
+document.getElementById("grid").addEventListener("click",function(e){var id=e.target.getAttribute("data-id"),p=id&&byId(id);if(p&&(cart[id]||0)<p.stock){cart[id]=(cart[id]||0)+1;renderCart();renderGrid();document.getElementById("msg").textContent="";setOpen(true)}});
+document.getElementById("items").addEventListener("click",function(e){var id=e.target.getAttribute("data-id"),d=+e.target.getAttribute("data-d");if(id){cart[id]=Math.min(cart[id]+d,byId(id).stock);if(cart[id]<=0)delete cart[id];renderCart();renderGrid()}});
 document.getElementById("openCart").onclick=function(){setOpen(true)};
 document.getElementById("closeCart").onclick=function(){setOpen(false)};
+document.getElementById("backdrop").onclick=function(){setOpen(false)};
 document.addEventListener("keydown",function(e){if(e.key==="Escape")setOpen(false)});
-document.getElementById("checkout").onclick=function(){document.getElementById("msg").textContent=Object.keys(cart).length?"Ceci est un site d'exemple : le paiement n'est pas branché. Une vraie boutique enverrait ici vers un paiement sécurisé.":"Ajoutez d'abord une pièce au panier."};
-renderFilters();renderGrid();renderCart();
+document.getElementById("checkout").onclick=function(){document.getElementById("msg").textContent="Ceci est un site d'exemple : le paiement n'est pas branché. Une vraie boutique enverrait ici vers un paiement sécurisé."};
+load();renderFilters();renderGrid();renderCart();
