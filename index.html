@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Atelier Mwezi – Céramique faite main (site d'exemple)</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Source+Serif+4:wght@400;600&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="banner">Site d'exemple : atelier et produits fictifs, aucune commande réelle.</div>
+<div class="wrap">
+<header class="top">
+<a class="logo" href="#">Atelier Mwezi</a>
+<nav aria-label="Navigation principale">
+<a class="hide" href="#boutique">Boutique</a>
+<a class="hide" href="#atelier">L'atelier</a>
+<a class="hide" href="#contact">Contact</a>
+<button class="cartbtn" id="openCart" aria-controls="drawer">Panier (<span id="count">0</span>)</button>
+</nav>
+</header>
+
+<section class="hero">
+<div>
+<h1>Des bols qui ont une histoire.</h1>
+<p>Chaque pièce est tournée à la main, émaillée dans les couleurs du lagon et cuite en petite série. Quand elle est vendue, elle est vendue.</p>
+<a class="btn" href="#boutique">Voir les pièces disponibles</a>
+</div>
+<div class="shelf" id="heroShelf" aria-hidden="true"></div>
+</section>
+
+<section id="boutique" style="padding-bottom:40px">
+<h2>La boutique</h2>
+<div class="filters" role="group" aria-label="Filtrer par catégorie" id="filters"></div>
+<div class="grid" id="grid"></div>
+</section>
+
+<section id="atelier" class="about">
+<div>
+<h2>Fait à la main, en petite série</h2>
+<p>L'Atelier Mwezi est un atelier de poterie fictif, imaginé pour montrer à quoi peut ressembler la boutique en ligne d'un artisan.</p>
+<p>Une bonne page « à propos » raconte qui fabrique, avec quoi, et pourquoi. C'est souvent ce qui décide un acheteur devant une pièce faite main.</p>
+</div>
+<ul class="facts">
+<li><b>Matière</b><span>Grès, émaux sans plomb</span></li>
+<li><b>Fabrication</b><span>Tournage et cuisson à l'atelier</span></li>
+<li><b>Délai d'expédition</b><span>3 à 5 jours ouvrés</span></li>
+<li><b>Retours</b><span>14 jours, pièce intacte</span></li>
+</ul>
+</section>
+</div>
+
+<section id="contact" class="contact">
+<div class="wrap">
+<h2>Une question, une pièce sur mesure ?</h2>
+<p>Écrivez à l'atelier sur <a href="#contact">WhatsApp</a> ou par <a href="#contact">e-mail</a>. Réponse sous 48 h. (Liens d'exemple.)</p>
+</div>
+</section>
+<div class="wrap"><footer>Mentions légales, CGV et politique de confidentialité à ajouter avant toute vente réelle.</footer></div>
+
+<aside id="drawer" aria-label="Panier" aria-hidden="true">
+<button class="close" id="closeCart" aria-label="Fermer le panier">&times;</button>
+<h2>Votre panier</h2>
+<ul id="items"></ul>
+<div class="total"><span>Total</span><span id="total">0 €</span></div>
+<button class="btn" id="checkout">Commander</button>
+<p id="msg" role="status"></p>
+</aside>
+
+<script src="js/app.js"></script>
+</body>
+</html>
