@@ -57,3 +57,21 @@ footer{padding:24px 0;color:var(--muted);font-size:.9rem}
 .close{align-self:flex-end;background:none;border:0;color:var(--ink);font-size:1.6rem;line-height:1}
 @media (max-width:760px){.hero,.about{grid-template-columns:1fr;gap:28px}.hero{padding-top:24px}nav a.hide{display:none}}
 @media (prefers-reduced-motion:reduce){#drawer{transition:none}}
+.toolbar{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;gap:12px;margin:0 0 24px}
+.toolbar .filters{margin:0}
+.sort{font:500 .95rem "Bricolage Grotesque",sans-serif;color:var(--muted);display:flex;align-items:center;gap:8px}
+.sort select{font:inherit;color:var(--ink);background:var(--surface);border:1.5px solid var(--line);border-radius:999px;padding:6px 12px}
+.stock{font:500 .85rem "Bricolage Grotesque",sans-serif;color:var(--muted)}
+.stock.low{color:var(--lagon)}
+.stock.out{color:var(--muted);text-decoration:line-through}
+.card.sold .pic svg{opacity:.4;filter:grayscale(1)}
+.add:disabled,.qty button:disabled,#checkout:disabled{opacity:.45;cursor:not-allowed;filter:none}
+.ship{font-size:.9rem;margin:12px 0 4px}
+.ship:not(:empty)::after{content:"";display:block;height:6px;border-radius:3px;margin-top:8px;background:linear-gradient(var(--lagon),var(--lagon)) 0/var(--p,0%) 100% no-repeat,var(--line)}
+.sub{display:flex;justify-content:space-between;color:var(--muted);font-size:.95rem;padding:2px 0}
+.total{border-top:1px solid var(--line);margin-top:8px}
+#backdrop{position:fixed;inset:0;background:rgba(10,20,22,.45);z-index:9}
+body.locked{overflow:hidden}
+.thanks{padding:64px 0 96px;max-width:60ch}
+.thanks h1{font-size:clamp(2rem,5vw,3.2rem);line-height:1.05;letter-spacing:-.03em;margin:0 0 20px}
+.thanks p{color:var(--muted);margin:0 0 28px}
