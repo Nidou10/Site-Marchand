@@ -3,22 +3,21 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Atelier Mwezi – Céramique faite main (site d'exemple)</title>
-<meta name="description" content="Céramique tournée à la main en petite série : bols, vases, tasses et pichets. Site d'exemple, aucune commande réelle.">
+<title>Atelier Mwezi – Céramique faite main</title>
+<meta name="description" content="Céramique tournée à la main en petite série : bols, vases, tasses et pichets. Paiement sécurisé, expédition sous 3 à 5 jours ouvrés.">
 <meta property="og:title" content="Atelier Mwezi – Céramique faite main">
 <meta property="og:description" content="Bols, vases et tasses tournés à la main, émaillés dans les couleurs du lagon.">
 <meta property="og:type" content="website">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Source+Serif+4:wght@400;600&display=swap">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="banner">Site d'exemple : atelier et produits fictifs, aucune commande réelle.</div>
 <div class="wrap">
 <header class="top">
 <a class="logo" href="#">Atelier Mwezi</a>
 <nav aria-label="Navigation principale">
 <a class="hide" href="#boutique">Boutique</a>
 <a class="hide" href="#atelier">L'atelier</a>
+<a class="hide" href="#faq">FAQ</a>
 <a class="hide" href="#contact">Contact</a>
 <button class="cartbtn" id="openCart" aria-controls="drawer">Panier (<span id="count">0</span>)</button>
 </nav>
@@ -33,12 +32,25 @@
 <div class="shelf" id="heroShelf" aria-hidden="true"></div>
 </section>
 
+<ul class="badges" aria-label="Nos engagements">
+<li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg><span><b>Paiement 100 % sécurisé</b>Carte bancaire via Stripe</span></li>
+<li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h11v10H3zM14 10h4l3 3v4h-7"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></svg><span><b>Expédition sous 3 à 5 jours</b>Offerte dès 60 €</span></li>
+<li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H8l-4 4z"/></svg><span><b>Réponse sous 48 h</b>Une vraie personne vous répond</span></li>
+<li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 0 3-6.2M4 4v4h4"/></svg><span><b>14 jours pour changer d'avis</b>Retour simple, voir les CGV</span></li>
+</ul>
+
 <section id="boutique" style="padding-bottom:40px">
+<nav class="crumbs" aria-label="Fil d'Ariane" id="crumbs"></nav>
 <h2>La boutique</h2>
-<div class="toolbar">
-<div class="filters" role="group" aria-label="Filtrer par catégorie" id="filters"></div>
-<label class="sort">Trier <select id="sort"><option value="">Par défaut</option><option value="asc">Prix croissant</option><option value="desc">Prix décroissant</option></select></label>
+<div class="search">
+<label class="field grow"><span>Rechercher</span><input type="search" id="q" placeholder="Bol, vase, bleu…" autocomplete="off"></label>
+<label class="field"><span>Prix</span><select id="price"><option value="0">Tous les prix</option><option value="30">Jusqu'à 30 €</option><option value="50">Jusqu'à 50 €</option></select></label>
+<label class="field"><span>Couleur</span><select id="color"><option value="">Toutes</option></select></label>
+<label class="field"><span>Trier</span><select id="sort"><option value="">Par défaut</option><option value="asc">Prix croissant</option><option value="desc">Prix décroissant</option></select></label>
+<label class="check"><input type="checkbox" id="instock"> En stock uniquement</label>
 </div>
+<div class="filters" role="group" aria-label="Filtrer par catégorie" id="filters"></div>
+<p class="found" id="found" role="status"></p>
 <div class="grid" id="grid"></div>
 </section>
 
@@ -56,26 +68,114 @@
 <li><b>Retours</b><span>14 jours, pièce intacte</span></li>
 </ul>
 </section>
+
+<section id="avis" class="reviews" hidden>
+<h2>Ce qu'en disent nos clients</h2>
+<p class="note" id="reviewsNote"></p>
+<div class="rgrid" id="reviews"></div>
+</section>
+
+<section id="faq" class="faq">
+<h2>Questions fréquentes</h2>
+<details><summary>Quels sont les délais de livraison ?</summary><p>Chaque commande est préparée et expédiée sous 3 à 5 jours ouvrés. La livraison coûte 6,90 € et elle est offerte dès 60 € d'achat. Les frais sont affichés dans le panier avant le paiement.</p></details>
+<details><summary>Dans quels pays livrez-vous ?</summary><p>Pour l'instant, uniquement en France. L'adresse de livraison est demandée sur la page de paiement.</p></details>
+<details><summary>Le paiement est-il sécurisé ?</summary><p>Oui. Le paiement se fait sur la page sécurisée de Stripe. Vos numéros de carte ne passent jamais par ce site et l'atelier n'y a pas accès.</p></details>
+<details><summary>Comment retourner une pièce ?</summary><p>Vous disposez de 14 jours après réception pour changer d'avis, sans avoir à vous justifier. Écrivez-nous, puis renvoyez la pièce intacte dans son emballage. Vous êtes remboursé dans les 14 jours. Les pièces faites sur mesure ne peuvent pas être retournées. Tout est détaillé dans les <a href="cgv.html#retractation">CGV</a>.</p></details>
+<details><summary>Ma pièce est arrivée cassée, que faire ?</summary><p>Prenez une photo du colis et de la pièce, puis écrivez-nous dès réception. La pièce sera remplacée si une autre est disponible, ou remboursée.</p></details>
+<details><summary>Comment entretenir les pièces ?</summary><p>Le lavage à la main avec une éponge douce préserve l'émail plus longtemps. Évitez les chocs thermiques, comme passer du réfrigérateur à l'eau bouillante. Les émaux utilisés sont sans plomb.</p></details>
+<details><summary>Pourquoi deux pièces ne sont-elles jamais identiques ?</summary><p>Chaque pièce est tournée et émaillée à la main. De légères différences de forme ou de couleur avec la photo sont normales : elles ne sont pas des défauts.</p></details>
+<details><summary>Une pièce est en rupture, puis-je la réserver ?</summary><p>Oui. Ouvrez la fiche de la pièce et remplissez le formulaire « Réserver cette pièce ». L'atelier vous recontacte dès qu'une nouvelle série sort du four, sans engagement de votre part.</p></details>
+</section>
 </div>
 
-<section id="contact" class="contact">
-<div class="wrap">
-<h2>Une question, une pièce sur mesure ?</h2>
-<p>Écrivez à l'atelier sur <a href="#contact">WhatsApp</a> ou par <a href="#contact">e-mail</a>. Réponse sous 48 h. (Liens d'exemple.)</p>
+<section class="news">
+<div class="wrap news-in">
+<div>
+<h2>Les nouvelles fournées, en premier</h2>
+<p>Un e-mail quand une série sort du four ou qu'une pièce revient en stock. Pas plus d'un par mois.</p>
+</div>
+<form name="newsletter" method="POST" action="message-envoye.html" data-netlify="true" netlify-honeypot="adresse" class="news-form">
+<input type="hidden" name="form-name" value="newsletter">
+<p class="hp"><label>Ne pas remplir <input name="adresse"></label></p>
+<label class="field"><span>Votre e-mail</span><input type="email" name="email" required autocomplete="email"></label>
+<label class="check"><input type="checkbox" name="consentement" value="oui" required> <span>J'accepte de recevoir les e-mails de l'atelier. Je peux me désinscrire à tout moment (<a href="confidentialite.html#newsletter">en savoir plus</a>).</span></label>
+<button class="btn" type="submit">M'inscrire</button>
+</form>
 </div>
 </section>
-<div class="wrap"><footer>Mentions légales, CGV et politique de confidentialité à ajouter avant toute vente réelle.</footer></div>
+
+<section id="contact" class="contact">
+<div class="wrap contact-in">
+<div>
+<h2>Une question, une pièce sur mesure ?</h2>
+<p>Écrivez à l'atelier, réponse sous 48 h.</p>
+<p class="direct" id="direct"></p>
+</div>
+<form name="contact" method="POST" action="message-envoye.html" data-netlify="true" netlify-honeypot="adresse" class="contact-form">
+<input type="hidden" name="form-name" value="contact">
+<p class="hp"><label>Ne pas remplir <input name="adresse"></label></p>
+<label class="field"><span>Nom</span><input name="nom" required autocomplete="name"></label>
+<label class="field"><span>E-mail</span><input type="email" name="email" required autocomplete="email"></label>
+<label class="field"><span>Message</span><textarea name="message" rows="4" required></textarea></label>
+<p class="small">Vos coordonnées servent uniquement à vous répondre (<a href="confidentialite.html">confidentialité</a>).</p>
+<button class="btn alt" type="submit">Envoyer</button>
+</form>
+</div>
+</section>
+
+<div class="wrap"><footer>
+<nav aria-label="Informations légales"><a href="mentions-legales.html">Mentions légales</a><a href="cgv.html">CGV</a><a href="confidentialite.html">Confidentialité et cookies</a><a href="#faq">FAQ</a></nav>
+<p>© Atelier Mwezi</p>
+</footer></div>
+
+<dialog id="product" aria-labelledby="pName">
+<button class="close" id="closeProduct" aria-label="Fermer la fiche">&times;</button>
+<nav class="crumbs" aria-label="Fil d'Ariane" id="pCrumbs"></nav>
+<div class="pview">
+<div class="gallery">
+<div class="main" id="pMain" title="Cliquer pour zoomer"></div>
+<div class="thumbs" id="pThumbs"></div>
+</div>
+<div class="pinfo">
+<h2 id="pName"></h2>
+<p class="price" id="pPrice"></p>
+<p id="pStock"></p>
+<p id="pDesc"></p>
+<ul class="facts small-facts" id="pFacts"></ul>
+<button class="btn" id="pAdd"></button>
+<form name="reservation" method="POST" action="message-envoye.html" data-netlify="true" netlify-honeypot="adresse" class="reserve" id="pReserve" hidden>
+<input type="hidden" name="form-name" value="reservation">
+<input type="hidden" name="piece" id="pPiece">
+<p class="hp"><label>Ne pas remplir <input name="adresse"></label></p>
+<h3>Réserver cette pièce</h3>
+<p class="small">Cette pièce est épuisée. Laissez vos coordonnées : l'atelier vous recontacte dès qu'une nouvelle série est prête. Sans engagement ni paiement.</p>
+<label class="field"><span>Nom</span><input name="nom" required autocomplete="name"></label>
+<label class="field"><span>E-mail</span><input type="email" name="email" required autocomplete="email"></label>
+<label class="field"><span>Quantité souhaitée</span><input type="number" name="quantite" min="1" max="10" value="1"></label>
+<button class="btn" type="submit">Réserver</button>
+</form>
+<div id="pReviews"></div>
+</div>
+</div>
+</dialog>
 
 <div id="backdrop" hidden></div>
 <aside id="drawer" aria-label="Panier" aria-hidden="true" inert>
 <button class="close" id="closeCart" aria-label="Fermer le panier">&times;</button>
 <h2>Votre panier</h2>
 <ul id="items"></ul>
+<form class="promo" id="promoForm">
+<label class="field grow"><span>Code promo</span><input id="promo" autocomplete="off" maxlength="40"></label>
+<button class="btn ghost" type="submit">Appliquer</button>
+</form>
+<p id="promoMsg" class="small" role="status"></p>
 <p id="ship" class="ship"></p>
 <div class="sub"><span>Sous-total</span><span id="subtotal">0 €</span></div>
+<div class="sub" id="discountRow" hidden><span id="discountLabel">Réduction</span><span id="discount"></span></div>
 <div class="sub"><span>Livraison</span><span id="shipping">–</span></div>
-<div class="total"><span>Total</span><span id="total">0 €</span></div>
-<button class="btn" id="checkout">Commander</button>
+<div class="total"><span>Total TTC</span><span id="total">0 €</span></div>
+<label class="check small"><input type="checkbox" id="cgv"> <span>J'ai lu et j'accepte les <a href="cgv.html" target="_blank">conditions générales de vente</a>.</span></label>
+<button class="btn" id="checkout">Commander avec obligation de paiement</button>
 <p id="msg" role="status"></p>
 </aside>
 
