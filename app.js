@@ -1,11 +1,3 @@
-var PRODUCTS=[
-{id:1,stock:3,name:"Bol lagon",cat:"Bols",price:28,shape:"bowl",color:"#0F7A83",desc:"Bol à soupe ou petit-déjeuner, 50 cl."},
-{id:2,stock:1,name:"Bol ylang",cat:"Bols",price:28,shape:"bowl",color:"#E3B23C",desc:"Même forme, émail jaune pâle."},
-{id:3,stock:2,name:"Vase haut",cat:"Vases",price:54,shape:"vase",color:"#1F3F46",desc:"Pour trois tiges ou un bouquet sec, 28 cm."},
-{id:4,stock:6,name:"Mug du matin",cat:"Tasses",price:22,shape:"mug",color:"#8FB8B4",desc:"Anse large, tient bien en main, 30 cl."},
-{id:5,stock:0,name:"Assiette creuse",cat:"Bols",price:32,shape:"plate",color:"#C9C2B4",desc:"Pour les pâtes, le riz ou les plats à partager."},
-{id:6,stock:1,name:"Pichet",cat:"Vases",price:46,shape:"jug",color:"#0F5C63",desc:"Pour l'eau à table, 1 litre. Ne goutte pas."}
-];
 function svg(shape,c,h){
 var d={
 bowl:'<path d="M10 28 H110 C108 70 84 90 60 90 C36 90 12 70 10 28Z" fill="'+c+'"/><rect x="8" y="24" width="104" height="8" rx="4" fill="'+c+'" opacity=".75"/>',
@@ -16,7 +8,7 @@ jug:'<path d="M34 14 H80 L84 28 C84 38 92 44 92 70 C92 98 80 108 58 108 C36 108 
 }[shape];
 return '<svg viewBox="0 0 120 120" height="'+h+'" width="'+h+'" role="img" aria-label="'+shape+'">'+d+'</svg>';
 }
-var SHIPPING=6.9,FREE_FROM=60,KEY="mwezi-cart";
+var KEY="mwezi-cart";
 var cart={},cats=["Tout"].concat(PRODUCTS.map(function(p){return p.cat}).filter(function(v,i,a){return a.indexOf(v)===i})),current="Tout",sort="",lastFocus=null;
 var fmt=function(n){return n.toLocaleString("fr-FR",{minimumFractionDigits:n%1?2:0,maximumFractionDigits:2})+" €"};
 var byId=function(id){return PRODUCTS.filter(function(x){return x.id==id})[0]};
@@ -72,5 +64,13 @@ document.getElementById("openCart").onclick=function(){setOpen(true)};
 document.getElementById("closeCart").onclick=function(){setOpen(false)};
 document.getElementById("backdrop").onclick=function(){setOpen(false)};
 document.addEventListener("keydown",function(e){if(e.key==="Escape")setOpen(false)});
-document.getElementById("checkout").onclick=function(){document.getElementById("msg").textContent="Ceci est un site d'exemple : le paiement n'est pas branché. Une vraie boutique enverrait ici vers un paiement sécurisé."};
+document.getElementById("checkout").onclick=function(){
+var btn=this,msg=document.getElementById("msg");
+if(location.protocol==="file:"){msg.textContent="Le paiement ne fonctionne qu'une fois le site en ligne (Netlify).";return}
+btn.disabled=true;msg.textContent="Redirection vers le paiement sécurisé…";
+fetch("/.netlify/functions/checkout",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({items:Object.keys(cart).map(function(id){return {id:+id,qty:cart[id]}})})})
+.then(function(r){return r.json()})
+.then(function(d){if(d.url)location.href=d.url;else{msg.textContent=d.error||"Le paiement a échoué.";btn.disabled=false}})
+.catch(function(){msg.textContent="Impossible de joindre le service de paiement. Réessayez dans un instant.";btn.disabled=false});
+};
 load();renderFilters();renderGrid();renderCart();
